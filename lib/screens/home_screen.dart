@@ -38,32 +38,43 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     _getJSONData('Waterworld');
     return Scaffold(
-      backgroundColor: styles.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: styles.appBarColor,
-        centerTitle: true,
-        title: Text(
-          "Movie App",
-          style: TextStyle(
-            color: styles.appBarTextColor,
-          ),
-        ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(16),
-        children: <Widget>[
-          SearchField(
-            hint: "Search",
-            controller: _searchController,
-            textInputType: TextInputType.text,
-            onChanged: (value) => {},
-            prefix: Icon(
-              Icons.search,
-              color: styles.iconColor,
+        backgroundColor: styles.backgroundColor,
+        appBar: AppBar(
+          backgroundColor: styles.appBarColor,
+          centerTitle: true,
+          title: Text(
+            "Movie App",
+            style: TextStyle(
+              color: styles.appBarTextColor,
             ),
           ),
-        ],
-      ),
-    );
+        ),
+        body: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: <Widget>[
+              SearchField(
+                hint: "Search",
+                controller: _searchController,
+                textInputType: TextInputType.text,
+                onChanged: (value) => {},
+                prefix: Icon(
+                  Icons.search,
+                  color: styles.iconColor,
+                ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: ListView(
+                    children: <Widget>[
+                      Text(
+                        "teste",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ))
+            ],
+          ),
+        ));
   }
 }
