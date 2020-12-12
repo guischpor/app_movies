@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:app_movies/styles/styles.dart';
 import 'package:app_movies/widgets/search_field.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -11,11 +14,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final styles = Styles();
+  var data = "";
+
+  Future<Map<String, dynamic>> _getJSONData(moveTitle) async {
+    var response = await http.get(
+        "https://jsonmock.hackerrank.com/api/movies/search/?Title=$moveTitle");
+
+    return json.decode(response.body);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    var teste = _getJSONData('Waterworld');
+    print(teste);
+    //debugPrint(getJSONData('Waterworld'));
+  }
 
   TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    _getJSONData('Waterworld');
     return Scaffold(
       backgroundColor: styles.backgroundColor,
       appBar: AppBar(
