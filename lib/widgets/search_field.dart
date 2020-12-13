@@ -23,8 +23,9 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: styles.backgroundInputField,
-          borderRadius: BorderRadius.circular(10)),
+        color: styles.backgroundInputField,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: TextField(
         controller: controller,
         keyboardType: textInputType,

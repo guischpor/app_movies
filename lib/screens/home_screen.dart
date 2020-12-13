@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:app_movies/models/moviesModel.dart';
 import 'package:app_movies/styles/styles.dart';
 import 'package:app_movies/widgets/search_field.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,30 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final styles = Styles();
 
-  //tentativa de conexão node js - não finalizado
+  final title = "";
+  final page = "";
+  List<MoviesModel> _movies;
+
+  Future<List<MoviesModel>> _getMovies() async {
+    try {
+      List<MoviesModel> listMovies = List();
+      final response = await http.get(
+          "https://jsonmock.hackerrank.com/api/movies/search/?Title=$title");
+
+      if (response.statusCode == 200) {
+        var decodeJson = jsonDecode(response.body);
+        decodeJson
+            .forEach((item) => listMovies.add(MoviesModel.fromJson(item)));
+        return listMovies;
+      } else {
+        print("Error loading movies list");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //tentativa de conexão com api node js - não finalizado
   // Future<String> _getJSONData() async {
   //   var response = await http.get("http://localhost:8080/api/data/moviesDB");
   //   return json.decode(response.body);
@@ -24,6 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    //inicializa a lista movies
+    _getMovies().then((map) {
+      _movies = map;
+      print(_movies.length);
+    });
   }
 
   TextEditingController _searchController = TextEditingController();
@@ -31,46 +59,50 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: styles.backgroundColor,
-        appBar: AppBar(
-          backgroundColor: styles.appBarColor,
-          centerTitle: true,
-          title: Text(
-            "Movie App",
-            style: TextStyle(
-              color: styles.appBarTextColor,
-            ),
+      backgroundColor: styles.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: styles.appBarColor,
+        centerTitle: true,
+        title: Text(
+          "Movie App",
+          style: TextStyle(
+            color: styles.appBarTextColor,
           ),
         ),
-        body: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: <Widget>[
-              SearchField(
-                hint: "Search",
-                controller: _searchController,
-                textInputType: TextInputType.text,
-                onChanged: (value) => {},
-                prefix: Icon(
-                  Icons.search,
-                  color: styles.iconColor,
-                ),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: <Widget>[
+            SearchField(
+              hint: "Search",
+              controller: _searchController,
+              textInputType: TextInputType.text,
+              onChanged: (value) => {},
+              prefix: Icon(
+                Icons.search,
+                color: styles.iconColor,
               ),
-              Expanded(
-                flex: 1,
-                child: ListView(
-                  children: <Widget>[
-                    Text(
-                      "teste",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              flex: 1,
+              child: ListView(
+                children: <Widget>[
+                  Text(
+                    "teste",
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ));
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
