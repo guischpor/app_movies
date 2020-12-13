@@ -14,29 +14,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final styles = Styles();
-  var data = "";
 
-  Future<Map<String, dynamic>> _getJSONData(moveTitle) async {
-    var response = await http.get(
-        "https://jsonmock.hackerrank.com/api/movies/search/?Title=$moveTitle");
-
-    return json.decode(response.body);
-  }
+  //tentativa de conexão node js - não finalizado
+  // Future<String> _getJSONData() async {
+  //   var response = await http.get("http://localhost:8080/api/data/moviesDB");
+  //   return json.decode(response.body);
+  // }
 
   @override
   void initState() {
     super.initState();
-
-    var teste = _getJSONData('Waterworld');
-    print(teste);
-    //debugPrint(getJSONData('Waterworld'));
   }
 
   TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _getJSONData('Waterworld');
     return Scaffold(
         backgroundColor: styles.backgroundColor,
         appBar: AppBar(
@@ -64,15 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Expanded(
-                  flex: 1,
-                  child: ListView(
-                    children: <Widget>[
-                      Text(
-                        "teste",
-                        style: TextStyle(color: Colors.white),
+                flex: 1,
+                child: ListView(
+                  children: <Widget>[
+                    Text(
+                      "teste",
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
-                    ],
-                  ))
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ));
