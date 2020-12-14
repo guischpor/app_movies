@@ -17,19 +17,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final title = "";
   final page = "";
-  List<MoviesModel> _movies;
+  List<Map> _movies;
 
-  Future<List<MoviesModel>> _getMovies() async {
+  Map data;
+
+  Future<Map> _getMovies() async {
     try {
-      List<MoviesModel> listMovies = List();
+      //List<MoviesModel> listMovies = List();
       final response = await http.get(
           "https://jsonmock.hackerrank.com/api/movies/search/?Title=$title");
 
       if (response.statusCode == 200) {
         var decodeJson = jsonDecode(response.body);
-        decodeJson
-            .forEach((item) => listMovies.add(MoviesModel.fromJson(item)));
-        return listMovies;
+
+        // List<Map<dynamic, dynamic>> listMovies =
+        //     (decodeJson).map((item) => item.fromJson(item)).toList();
+
+        return decodeJson;
       } else {
         print("Error loading movies list");
       }
@@ -49,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     //inicializa a lista movies
     _getMovies().then((map) {
-      _movies = map;
-      print(_movies.length);
+      data = map;
+      print(data);
     });
   }
 
@@ -58,6 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getMovies().then((map) {
+      data = map;
+    });
     return Scaffold(
       backgroundColor: styles.backgroundColor,
       appBar: AppBar(
@@ -89,15 +96,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               flex: 1,
-              child: ListView(
-                children: <Widget>[
-                  Text(
-                    "teste",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+              child: FutureBuilder<dynamic>(
+                builder: (context, snapshot) {
+                  var showData = data.toString();
+                  return ListView.builder(
+                    itemCount: showData.length,
+                    itemBuilder: (context, index) {
+                      return Text(
+                        showData,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],
